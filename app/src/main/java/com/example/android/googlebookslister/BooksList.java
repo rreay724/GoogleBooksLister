@@ -25,6 +25,8 @@ public class BooksList extends AppCompatActivity
             "https://www.googleapis.com/books/v1/volumes?q=video+game+development&maxResults=25&key=AIzaSyCq3urARExdLvRVtFx1eYHmS5HLtMJtGfU";
     private static final int BOOK_LOADER_ID =1;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +55,10 @@ public class BooksList extends AppCompatActivity
 
     @Override
     public Loader<List<Book>> onCreateLoader(int id, Bundle args) {
+        String QUERY = getIntent().getStringExtra("EXTRA_QUERY_INFO");
+
         Log.i("onCreateLoader", "onCreateLoader: initialized");
-        return new BookLoader (this, BOOK_REQUEST_URL);
+        return new BookLoader (this, QUERY);
     }
 
     @Override
@@ -75,9 +79,9 @@ public class BooksList extends AppCompatActivity
     }
 
     public static class BookLoader extends AsyncTaskLoader<List<Book>> {
-        private String mUrl;
+        private String [] mUrl;
 
-        public BookLoader(Context context, String url){
+        public BookLoader(Context context, String... url){
             super(context);
             mUrl = url;
         }
@@ -89,12 +93,11 @@ public class BooksList extends AppCompatActivity
 
         @Override
         public List<Book> loadInBackground() {
-            if (mUrl == null){
+            if (mUrl.length < 1 || mUrl[0] == null){
                 return null;
         }
 
-        List<Book> result = QueryUtils.fetchBookData(mUrl);
-            return result;
+        return QueryUtils.fetchBookData(mUrl[0]);
 
 
         }

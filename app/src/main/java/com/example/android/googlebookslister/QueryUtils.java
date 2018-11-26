@@ -1,5 +1,6 @@
 package com.example.android.googlebookslister;
 
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -24,6 +25,7 @@ public class QueryUtils {
             "https://www.googleapis.com/books/v1/volumes?q=video+game+development&maxResults=25&key=AIzaSyCq3urARExdLvRVtFx1eYHmS5HLtMJtGfU";
     private static final String LOG_TAG = "QueryUtils";
 
+
     private QueryUtils(){
     }
 
@@ -33,6 +35,7 @@ public class QueryUtils {
         String jsonResponse = null;
         try {
             jsonResponse = makeHttpRequest(url);
+
         } catch (IOException e) {
             Log.e("QueryUtils", "Error closing input stream", e);
         }
