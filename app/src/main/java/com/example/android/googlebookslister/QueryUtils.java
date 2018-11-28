@@ -1,7 +1,5 @@
 package com.example.android.googlebookslister;
 
-import android.content.Context;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -13,26 +11,23 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 public class QueryUtils {
 
-    private static final String BOOK_REQUEST_URL =
-            "https://www.googleapis.com/books/v1/volumes?q=video+game+development&maxResults=25&key=AIzaSyCq3urARExdLvRVtFx1eYHmS5HLtMJtGfU";
+
     private static final String LOG_TAG = "QueryUtils";
 
 
-    private QueryUtils(){
+    private QueryUtils() {
     }
 
-    public static List<Book> fetchBookData (String requestUrl) {
+    public static List<Book> fetchBookData(String requestUrl) {
         URL url = createUrl(requestUrl);
 
         String jsonResponse = null;
@@ -50,18 +45,18 @@ public class QueryUtils {
         return books;
     }
 
-    public static List<Book> extractBooks (String bookJSON){
-        if(TextUtils.isEmpty(bookJSON)){
+    public static List<Book> extractBooks(String bookJSON) {
+        if (TextUtils.isEmpty(bookJSON)) {
             return null;
         }
 
         List<Book> books = new ArrayList<>();
 
-        try{
+        try {
             JSONObject jsonBookObject = new JSONObject(bookJSON);
             JSONArray bookArray = jsonBookObject.getJSONArray("items");
 
-            for (int i = 0; i < bookArray.length(); i++){
+            for (int i = 0; i < bookArray.length(); i++) {
                 JSONObject currentBook = bookArray.getJSONObject(i);
                 JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
                 String title = volumeInfo.getString("title");
@@ -80,11 +75,11 @@ public class QueryUtils {
                 String date = volumeInfo.getString("publishedDate");
                 String url = volumeInfo.getString("infoLink");
 
-                books.add(new Book (title, authors, date, url));
+                books.add(new Book(title, authors, date, url));
 
-                Log.v(LOG_TAG,"JSON data successfully parsed");
+                Log.v(LOG_TAG, "JSON data successfully parsed");
             }
-        } catch (JSONException e){
+        } catch (JSONException e) {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
@@ -147,11 +142,11 @@ public class QueryUtils {
         return output.toString();
     }
 
-    private static final URL createUrl(String stringUrl){
+    private static final URL createUrl(String stringUrl) {
         URL url = null;
         try {
             url = new URL(stringUrl);
-        } catch (MalformedURLException e){
+        } catch (MalformedURLException e) {
             Log.e("QueryUtils", "createUrl: error", e);
         }
         return url;
