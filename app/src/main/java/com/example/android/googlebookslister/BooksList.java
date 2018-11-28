@@ -22,7 +22,7 @@ public class BooksList extends AppCompatActivity
 
     private BookAdapter mBookAdapter;
     private static final String BOOK_REQUEST_URL =
-            "https://www.googleapis.com/books/v1/volumes?q=video+game+development&maxResults=25&key=AIzaSyCq3urARExdLvRVtFx1eYHmS5HLtMJtGfU";
+            "https://www.googleapis.com/books/v1/volumes?q=video+game+development&maxResults=25";
     private static final int BOOK_LOADER_ID =1;
 
 
@@ -55,10 +55,10 @@ public class BooksList extends AppCompatActivity
 
     @Override
     public Loader<List<Book>> onCreateLoader(int id, Bundle args) {
-        String QUERY = getIntent().getStringExtra("EXTRA_QUERY_INFO");
+        String query = getIntent().getStringExtra("EXTRA_QUERY_INFO");
 
-        Log.i("onCreateLoader", "onCreateLoader: initialized");
-        return new BookLoader (this, QUERY);
+        return new BookLoader (this, query);
+
     }
 
     @Override

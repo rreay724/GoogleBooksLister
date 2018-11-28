@@ -9,16 +9,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.net.URLEncoder;
+
 public class MainActivity extends AppCompatActivity {
 
-    public static final String API_KEY = "&key=AIzaSyCq3urARExdLvRVtFx1eYHmS5HLtMJtGfU";
     public static final String BASE_URL = "https://www.googleapis.com/books/v1/volumes?q=";
-    public static final String MAX_RESULTS = "&maxResults=25";
     private static final String BOOK_REQUEST_URL =
-            "https://www.googleapis.com/books/v1/volumes?q=video+game+development&maxResults=25&key=AIzaSyCq3urARExdLvRVtFx1eYHmS5HLtMJtGfU";
+            "https://www.googleapis.com/books/v1/volumes?q=video+game+development&maxResults=25";
+    private static final String MAX_RESULTS = "&maxResults=25";
     private EditText searchEditText;
 
     public String searchQuery;
+    public String mUrlQuery;
 
 
     @Override
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(MainActivity.this, BooksList.class);
-                searchQuery = getSearchUrl(BASE_URL);
+                searchQuery = getSearchUrl();
 
                 intent.putExtra("EXTRA_QUERY_INFO", searchQuery);
                 startActivity(intent);
@@ -47,12 +49,23 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public String getSearchUrl(String url) {
+//    public String getSearchUrl(String url) {
+//        String params = searchEditText.getText().toString();
+//        params = params.replace(" ", "+");
+//        url += params + MAX_RESULTS;
+//        return url;
+//    }
+
+
+
+    public String getSearchUrl(){
         String params = searchEditText.getText().toString();
-        params = params.replace(" ", "+");
-        url += params + "&filter=ebooks&prettyPrint=false";
+        String encode = URLEncoder.encode(params);
+        String url = BASE_URL + encode + MAX_RESULTS;
         return url;
     }
+
+
 
 
 }

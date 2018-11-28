@@ -14,8 +14,6 @@
         android:textSize="24sp" />
 
 
-
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,13 +37,6 @@
             android:textSize="14sp" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/publisherTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="Sold by: Publisher" />
 
 
 </LinearLayout>

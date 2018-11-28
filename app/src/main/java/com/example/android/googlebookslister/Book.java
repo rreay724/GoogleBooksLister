@@ -4,15 +4,16 @@ public class Book {
 
     private String mTitle;
     private String mAuthor;
-    private String mPublisher;
+//    private String mPublisher;
     private String mDate;
     private String mInfoUrl;
 
 
-    public Book (String title, String author, String date, String publisher, String infoUrl){
+
+    public Book (String title, String author, String date, String infoUrl){
         mTitle = title;
         mAuthor = author;
-        mPublisher = publisher;
+//        mPublisher = publisher;
         mDate = date;
         mInfoUrl = infoUrl;
 
@@ -26,9 +27,9 @@ public class Book {
         return mAuthor;
     }
 
-    public String getPublisher() {
-        return mPublisher;
-    }
+//    public String getPublisher() {
+//        return mPublisher;
+//    }
 
     public String getDate() {
         return mDate;

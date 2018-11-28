@@ -1,5 +1,6 @@
 package com.example.android.googlebookslister;
 
+import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,9 +13,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,12 +65,22 @@ public class QueryUtils {
                 JSONObject currentBook = bookArray.getJSONObject(i);
                 JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
                 String title = volumeInfo.getString("title");
+//                StringBuilder authorBuilder = new StringBuilder();
+//                if(volumeInfo.has("authors")){
+//                    JSONArray authors = volumeInfo.getJSONArray("authors");
+//                    if(authors.length() > 0){
+//                        authorBuilder.append(authors.getString(0));
+//                    }
+//                    for (int j = 1; j < authors.length(); j++){
+//                        authorBuilder.append(volumeInfo.getString("publisher"));
+//                    }
+//                }
                 String authors = volumeInfo.getString("authors");
-                String publisher = volumeInfo.getString("publisher");
+//                String publisher = volumeInfo.getString("publisher");
                 String date = volumeInfo.getString("publishedDate");
                 String url = volumeInfo.getString("infoLink");
 
-                books.add(new Book (title, authors, date, publisher, url));
+                books.add(new Book (title, authors, date, url));
 
                 Log.v(LOG_TAG,"JSON data successfully parsed");
             }
