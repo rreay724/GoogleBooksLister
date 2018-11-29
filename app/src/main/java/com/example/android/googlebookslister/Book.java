@@ -1,5 +1,6 @@
 package com.example.android.googlebookslister;
 
+
 public class Book {
 
     private String mTitle;
@@ -10,12 +11,14 @@ public class Book {
 
 
 
+
     public Book (String title, String author, String date, String infoUrl){
         mTitle = title;
         mAuthor = author;
 //        mPublisher = publisher;
         mDate = date;
         mInfoUrl = infoUrl;
+
 
     }
 

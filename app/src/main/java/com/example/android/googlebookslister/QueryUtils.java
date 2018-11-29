@@ -51,6 +51,7 @@ public class QueryUtils {
         }
 
         List<Book> books = new ArrayList<>();
+        StringBuilder authorBuilder = new StringBuilder();
 
         try {
             JSONObject jsonBookObject = new JSONObject(bookJSON);
@@ -60,22 +61,26 @@ public class QueryUtils {
                 JSONObject currentBook = bookArray.getJSONObject(i);
                 JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
                 String title = volumeInfo.getString("title");
-//                StringBuilder authorBuilder = new StringBuilder();
-//                if(volumeInfo.has("authors")){
-//                    JSONArray authors = volumeInfo.getJSONArray("authors");
-//                    if(authors.length() > 0){
-//                        authorBuilder.append(authors.getString(0));
-//                    }
-//                    for (int j = 1; j < authors.length(); j++){
-//                        authorBuilder.append(volumeInfo.getString("publisher"));
-//                    }
-//                }
-                String authors = volumeInfo.getString("authors");
-//                String publisher = volumeInfo.getString("publisher");
-                String date = volumeInfo.getString("publishedDate");
-                String url = volumeInfo.getString("infoLink");
 
-                books.add(new Book(title, authors, date, url));
+                // Add an extra try block because it was not returning all results because of author
+                // listing.
+                try {
+                    JSONArray authors = volumeInfo.getJSONArray("authors");
+                    String author = authors.getString(0);
+
+
+                    String date = volumeInfo.getString("publishedDate");
+                    String url = volumeInfo.getString("infoLink");
+
+                    for (int j = 1; j < authors.length(); j++) {
+                        authorBuilder.append(", ");
+                    }
+
+                    Book bookObject = new Book(title, author, date, url);
+                    books.add(bookObject);
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "Problem parsing author JSON results", e);
+                }
 
                 Log.v(LOG_TAG, "JSON data successfully parsed");
             }
