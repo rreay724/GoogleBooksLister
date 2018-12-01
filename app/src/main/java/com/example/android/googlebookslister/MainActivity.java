@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, BooksList.class);
                 searchQuery = getSearchUrl();
 
-                if (searchQuery != null){
+                if (searchQuery.equals("https://www.googleapis.com/books/v1/volumes?q=&maxResults=25")){
                     hideKeyboard(MainActivity.this);
                     Toast.makeText(getBaseContext(), "Please enter a search.", Toast.LENGTH_SHORT).show();
                 }
