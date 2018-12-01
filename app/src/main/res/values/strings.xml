@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Google Books Lister</string>
     <string name="published_by">Published by</string>
-    <string name="search_volumes_query">https://www.googleapis.com/books/v1/volumes?q=%1$s</string>
+    <string name="book_summary">This is sample text to be input for the summary.
+        This will pull the information used to describe the book in detail to the reader.</string>
 
 </resources>

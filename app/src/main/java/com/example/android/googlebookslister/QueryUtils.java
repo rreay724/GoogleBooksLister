@@ -1,5 +1,7 @@
 package com.example.android.googlebookslister;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -45,13 +47,45 @@ public class QueryUtils {
         return books;
     }
 
-    public static List<Book> extractBooks(String bookJSON) {
+    private static Bitmap makeHttpRequest(String imageUrl) throws IOException {
+        Bitmap bookImage = null;
+        if (imageUrl == null) {
+            return bookImage;
+        }
+
+        URL url = createUrl(imageUrl);
+        HttpURLConnection urlConnection = null;
+        InputStream inputStream = null;
+        try {
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+            urlConnection.connect();
+            if (urlConnection.getResponseCode() == 200) {
+                inputStream = urlConnection.getInputStream();
+                bookImage = BitmapFactory.decodeStream(inputStream);
+            }
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Error reading bitmap inputstream");
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+        return bookImage;
+    }
+
+    public static List<Book> extractBooks(final String bookJSON) {
         if (TextUtils.isEmpty(bookJSON)) {
             return null;
         }
 
         List<Book> books = new ArrayList<>();
         StringBuilder authorBuilder = new StringBuilder();
+        String summary;
 
         try {
             JSONObject jsonBookObject = new JSONObject(bookJSON);
@@ -59,27 +93,44 @@ public class QueryUtils {
 
             for (int i = 0; i < bookArray.length(); i++) {
                 JSONObject currentBook = bookArray.getJSONObject(i);
+                String id = currentBook.getString("id");
                 JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
-                String title = volumeInfo.getString("title");
+                JSONObject searchInfo = currentBook.optJSONObject("searchInfo");
+
 
                 // Add an extra try block because it was not returning all results because of author
                 // listing.
                 try {
+
+                    String title = volumeInfo.getString("title");
+
+                    // If book does not have summary
+                    summary = volumeInfo.optString("description");
+                    if (summary == null) {
+                        summary = searchInfo.optString("textSnippet");
+                    }
                     JSONArray authors = volumeInfo.getJSONArray("authors");
                     String author = authors.getString(0);
 
-
-                    String date = volumeInfo.getString("publishedDate");
+//                    String date = volumeInfo.getString("publishedDate");
                     String url = volumeInfo.getString("infoLink");
+
+                    JSONObject imageLink = volumeInfo.getJSONObject("imageLinks");
+                    String imageUrl = imageLink.getString("thumbnail");
+                    // Load bitmap from image URL
+                    Bitmap bookImage = makeHttpRequest(imageUrl);
 
                     for (int j = 1; j < authors.length(); j++) {
                         authorBuilder.append(", ");
                     }
 
-                    Book bookObject = new Book(title, author, date, url);
-                    books.add(bookObject);
+                    books.add(new Book(id, title, author, bookImage, summary, url));
+
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "Problem parsing author JSON results", e);
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    Log.e(LOG_TAG, "Problem parsing input stream for image URL");
                 }
 
                 Log.v(LOG_TAG, "JSON data successfully parsed");
@@ -121,7 +172,7 @@ public class QueryUtils {
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the book JSON results.", e);
+            Log.e(LOG_TAG, "Problem reading input stream.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -132,6 +183,7 @@ public class QueryUtils {
         }
         return jsonResponse;
     }
+
 
     private static String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();

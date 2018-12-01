@@ -6,10 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -18,14 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BooksList extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<List<Book>>{
+        implements LoaderManager.LoaderCallbacks<List<Book>> {
 
-    private BookAdapter mBookAdapter;
     private static final String BOOK_REQUEST_URL =
             "https://www.googleapis.com/books/v1/volumes?q=video+game+development&maxResults=25";
-    private static final int BOOK_LOADER_ID =1;
-
-
+    private static final int BOOK_LOADER_ID = 1;
+    private BookAdapter mBookAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +53,7 @@ public class BooksList extends AppCompatActivity
     public Loader<List<Book>> onCreateLoader(int id, Bundle args) {
         String query = getIntent().getStringExtra("EXTRA_QUERY_INFO");
 
-        return new BookLoader (this, query);
+        return new BookLoader(this, query);
 
     }
 
@@ -70,8 +66,8 @@ public class BooksList extends AppCompatActivity
 
         if (data != null && !data.isEmpty()) {
             mBookAdapter.addAll(data);
+        }
     }
-}
 
     @Override
     public void onLoaderReset(Loader<List<Book>> loader) {
@@ -79,9 +75,9 @@ public class BooksList extends AppCompatActivity
     }
 
     public static class BookLoader extends AsyncTaskLoader<List<Book>> {
-        private String [] mUrl;
+        private String[] mUrl;
 
-        public BookLoader(Context context, String... url){
+        public BookLoader(Context context, String... url) {
             super(context);
             mUrl = url;
         }
@@ -93,11 +89,11 @@ public class BooksList extends AppCompatActivity
 
         @Override
         public List<Book> loadInBackground() {
-            if (mUrl.length < 1 || mUrl[0] == null){
+            if (mUrl.length < 1 || mUrl[0] == null) {
                 return null;
-        }
+            }
 
-        return QueryUtils.fetchBookData(mUrl[0]);
+            return QueryUtils.fetchBookData(mUrl[0]);
 
 
         }
