@@ -12,6 +12,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
+/** Created by Bobby Reay - 12/1/2018 **/
+
+
+/** Contains code for Book Adapter linking views to book_display_details layout**/
+
 public class BookAdapter extends ArrayAdapter<Book> {
 
     public BookAdapter(Context context, List<Book> books) {

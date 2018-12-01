@@ -20,18 +20,28 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Created by Bobby Reay - 12/1/2018 **/
+
+
+/** Contains networking and JSON parsing code **/
+
 public class QueryUtils {
 
 
     private static final String LOG_TAG = "QueryUtils";
 
-
+    /**
+     * Create a private constructor because no one should ever create a {@link QueryUtils} object.
+     * This class is only meant to hold static variables and methods, which can be accessed
+     * directly from the class name QueryUtils (and an object instance of QueryUtils is not needed).
+     */
     private QueryUtils() {
     }
 
+    /** Helper method to fetch book data and call networking code within method **/
+
     public static List<Book> fetchBookData(String requestUrl) {
         URL url = createUrl(requestUrl);
-
         String jsonResponse = null;
         try {
             jsonResponse = makeHttpRequest(url);
@@ -41,44 +51,16 @@ public class QueryUtils {
         }
 
         List<Book> books = extractBooks(jsonResponse);
-
         Log.i(LOG_TAG, "fetchBookData initialized");
-
         return books;
     }
 
-    private static Bitmap makeHttpRequest(String imageUrl) throws IOException {
-        Bitmap bookImage = null;
-        if (imageUrl == null) {
-            return bookImage;
-        }
 
-        URL url = createUrl(imageUrl);
-        HttpURLConnection urlConnection = null;
-        InputStream inputStream = null;
-        try {
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.setDoInput(true);
-            urlConnection.connect();
-            if (urlConnection.getResponseCode() == 200) {
-                inputStream = urlConnection.getInputStream();
-                bookImage = BitmapFactory.decodeStream(inputStream);
-            }
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "Error reading bitmap inputstream");
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        }
-        return bookImage;
-    }
-
-    public static List<Book> extractBooks(final String bookJSON) {
+    /**
+     * Return a list of {@link Book} objects that has been built up from
+     * parsing a JSON response.
+     */
+    private static List<Book> extractBooks(final String bookJSON) {
         if (TextUtils.isEmpty(bookJSON)) {
             return null;
         }
@@ -146,6 +128,43 @@ public class QueryUtils {
         return books;
     }
 
+    /**
+     * Make an HTTP request to the given imageURL and return a Bitmap as the response.
+     */
+    private static Bitmap makeHttpRequest(String imageUrl) throws IOException {
+        Bitmap bookImage = null;
+        if (imageUrl == null) {
+            return bookImage;
+        }
+
+        URL url = createUrl(imageUrl);
+        HttpURLConnection urlConnection = null;
+        InputStream inputStream = null;
+        try {
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+            urlConnection.connect();
+            if (urlConnection.getResponseCode() == 200) {
+                inputStream = urlConnection.getInputStream();
+                bookImage = BitmapFactory.decodeStream(inputStream);
+            }
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Error reading bitmap inputstream");
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+        return bookImage;
+    }
+
+    /**
+     * Make an HTTP request to the given URL and return a String as the response.
+     */
     private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
 
@@ -184,7 +203,10 @@ public class QueryUtils {
         return jsonResponse;
     }
 
-
+    /**
+     * Convert the {@link InputStream} into a String which contains the
+     * whole JSON response from the server.
+     */
     private static String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
         if (inputStream != null) {
@@ -199,6 +221,7 @@ public class QueryUtils {
         return output.toString();
     }
 
+    /** Helper method to create {@link} URL object **/
     private static final URL createUrl(String stringUrl) {
         URL url = null;
         try {

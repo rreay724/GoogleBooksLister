@@ -3,6 +3,10 @@ package com.example.android.googlebookslister;
 
 import android.graphics.Bitmap;
 
+/** Created by Bobby Reay - 12/1/2018 **/
+
+/** Class to define getter methods for BookAdapter.java **/
+
 public class Book {
 
     private String mId;

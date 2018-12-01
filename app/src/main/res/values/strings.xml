@@ -3,5 +3,7 @@
     <string name="published_by">Published by</string>
     <string name="book_summary">This is sample text to be input for the summary.
         This will pull the information used to describe the book in detail to the reader.</string>
+    <string name="no_internet">Not connected to internet.</string>
+    <string name="no_books">No books found.</string>
 
 </resources>
