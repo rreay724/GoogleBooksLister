@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String BASE_URL = "https://www.googleapis.com/books/v1/volumes?q=";
     private static final String BOOK_REQUEST_URL =
             "https://www.googleapis.com/books/v1/volumes?q=video+game+development&maxResults=25";
-    private static final String MAX_RESULTS = "&maxResults=25";
+    private static final String MAX_RESULTS = "&maxResults=40";
     public String searchQuery;
     private EditText searchEditText;
 
