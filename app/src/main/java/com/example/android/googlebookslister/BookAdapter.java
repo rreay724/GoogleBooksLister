@@ -40,7 +40,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         titleView.setText(currentBook.getTitle());
 
         TextView authorTextView = listItemView.findViewById(R.id.authorTextView);
-        authorTextView.setText(currentBook.getAuthor());
+        authorTextView.setText(checkForAuthor(currentBook.getAuthor()));
 
 //        TextView dateTextView = listItemView.findViewById(R.id.dateTextView);
 //        dateTextView.setText(currentBook.getDate());
@@ -62,5 +62,12 @@ public class BookAdapter extends ArrayAdapter<Book> {
             description = "Description is not available.";
         }
         return description;
+    }
+
+    private String checkForAuthor(String authors){
+        if (authors == null || authors.isEmpty()) {
+            authors = "No author to display.";
+        }
+        return authors;
     }
 }

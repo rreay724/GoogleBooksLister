@@ -66,7 +66,6 @@ public class QueryUtils {
         }
 
         List<Book> books = new ArrayList<>();
-        StringBuilder authorBuilder = new StringBuilder();
         String summary;
 
         try {
@@ -83,7 +82,6 @@ public class QueryUtils {
                 // Add an extra try block because it was not returning all results because of author
                 // listing.
                 try {
-
                     String title = volumeInfo.getString("title");
 
                     // If book does not have summary
@@ -91,8 +89,9 @@ public class QueryUtils {
                     if (summary == null) {
                         summary = searchInfo.optString("textSnippet");
                     }
+
                     JSONArray authors = volumeInfo.getJSONArray("authors");
-                    String author = authors.getString(0);
+                    String author = extractAllAuthors(authors);
 
 //                    String date = volumeInfo.getString("publishedDate");
                     String url = volumeInfo.getString("infoLink");
@@ -102,15 +101,11 @@ public class QueryUtils {
                     // Load bitmap from image URL
                     Bitmap bookImage = makeHttpRequest(imageUrl);
 
-                    for (int j = 1; j < authors.length(); j++) {
-                        authorBuilder.append(", ");
-                    }
-
                     books.add(new Book(id, title, author, bookImage, summary, url));
 
-                } catch (JSONException e) {
-                    Log.e(LOG_TAG, "Problem parsing author JSON results", e);
-                    e.printStackTrace();
+//                } catch (JSONException e) {
+//                    Log.e(LOG_TAG, "Problem parsing author JSON results", e);
+//                    e.printStackTrace();
                 } catch (IOException e) {
                     Log.e(LOG_TAG, "Problem parsing input stream for image URL");
                 }
@@ -124,7 +119,6 @@ public class QueryUtils {
             Log.e(LOG_TAG, "Problem parsing the book JSON results", e);
 
         }
-
         return books;
     }
 
@@ -230,5 +224,20 @@ public class QueryUtils {
             Log.e("QueryUtils", "createUrl: error", e);
         }
         return url;
+    }
+
+    private static String extractAllAuthors(JSONArray authorsArray) throws JSONException{
+        String authorsList = null;
+
+        if(authorsArray.length() == 0)
+            authorsList = "No Author";
+
+        for (int i = 0; i < authorsArray.length(); i++){
+            if (i == 0)
+                authorsList = "- " + authorsArray.getString(0);
+            else
+                authorsList = authorsList + ", " + authorsArray.getString(i);
+        }
+        return authorsList;
     }
 }
