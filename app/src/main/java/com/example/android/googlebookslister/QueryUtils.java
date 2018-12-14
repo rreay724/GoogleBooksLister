@@ -106,7 +106,10 @@ public class QueryUtils {
 //                } catch (JSONException e) {
 //                    Log.e(LOG_TAG, "Problem parsing author JSON results", e);
 //                    e.printStackTrace();
+                } catch (JSONException e){
+                    e.printStackTrace();
                 } catch (IOException e) {
+                    e.printStackTrace();
                     Log.e(LOG_TAG, "Problem parsing input stream for image URL");
                 }
 
@@ -234,7 +237,7 @@ public class QueryUtils {
 
         for (int i = 0; i < authorsArray.length(); i++){
             if (i == 0)
-                authorsList = "- " + authorsArray.getString(0);
+                authorsList = "" + authorsArray.getString(0);
             else
                 authorsList = authorsList + ", " + authorsArray.getString(i);
         }
